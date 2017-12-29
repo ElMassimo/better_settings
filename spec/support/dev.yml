@@ -1,0 +1,6 @@
+development:
+  language:
+    smalltalk:
+      paradigm: object-oriented
+    clojure:
+      paradigm: functional

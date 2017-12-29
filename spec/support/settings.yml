@@ -1,0 +1,41 @@
+setting1:
+  setting1_child: saweet
+  deep:
+    another: my value
+    child:
+      value: 2
+
+setting2: 5
+setting3: <%= 5 * 5 %>
+global: 'wat'
+name: test
+
+development:
+  language:
+    haskell:
+      paradigm: functional
+    smalltalk:
+      paradigm: object oriented
+
+  environment: development
+
+language:
+  haskell:
+    paradigm: functional
+  smalltalk:
+    paradigm: object oriented
+
+collides:
+  does: not
+nested:
+  collides:
+    does: not either
+
+nil:
+'false': false
+
+array:
+  -
+    name: first
+  -
+    name: second
