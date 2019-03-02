@@ -148,3 +148,5 @@ After using [settingslogic](https://github.com/settingslogic/settingslogic) for 
 - __Fail-Fast:__ Settings are eagerly loaded when `source` is called.
 - __No Optional Setings:__ Any optional setting can be modeled in a safer way, this library doesn't allow them.
 - __Not Tied to a Source File:__ Useful to create multiple environment-specific files.
+
+You can read more about it in [this blog post](https://maximomussini.com/posts/better-settings/).
