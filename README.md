@@ -21,7 +21,7 @@ Better Settings
 
 A robust settings library for Ruby. Access your settings by calling methods on a safe immutable object.
 
-### Features ⚡️
+## Features ⚡️
 
 - 🚀 __Light and Performant:__ settings are eagerly loaded, no `method_missing` tricks, no dependencies.
 - 💬 __Useful Error Messages:__ when trying to access a setting that does not exist.
@@ -32,7 +32,7 @@ A robust settings library for Ruby. Access your settings by calling methods on a
 You can read more about it in [the blog announcement](https://maximomussini.com/posts/better-settings/).
 
 
-### Installation 💿
+## Installation 💿
 
 Add this line to your application's Gemfile:
 
@@ -48,9 +48,9 @@ Or install it yourself as:
 
     $ gem install better_settings
 
-### Usage 🚀
+## Usage 🚀
 
-#### 1. Define a class
+### 1. Define a class
 
 Create a class in your application that extends `BetterSettings`:
 
@@ -68,7 +68,7 @@ Also, we specified a `namespace` with the current environment. You can provide
 any value that corresponds to a key in the YAML file that you want to use.
 This allows to target different environments with the same file.
 
-#### 2. Create your settings
+### 2. Create your settings
 
 Now, create a YAML file that contains all the possible namespaces:
 
@@ -95,7 +95,7 @@ The `defaults` group in this example won't be used directly, we are using YAML's
 syntax to reuse those values when we use `<<: *defaults`, allowing us to share
 these values across environments.
 
-#### 3. Access your settings
+### 3. Access your settings
 
 You can use these settings anywhere, for example in a model:
 
@@ -124,7 +124,7 @@ or in the console:
 => "Did you know you can use ERB inside the YML file? Env is development."
 ```
 
-### Advanced Setup ⚙
+## Advanced Setup ⚙
 
 You can create as many setting classes as you need, and name them in different ways, and read from as many files as necessary (nested keys will be merged).
 
