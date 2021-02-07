@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.test_files   = Dir.glob('{spec}/**/*.rb')
   s.require_path = 'lib'
 
-  s.required_ruby_version = '~> 2.2'
+  s.required_ruby_version = Gem::Requirement.new('>= 2.2')
 
   s.add_development_dependency 'coveralls'
   s.add_development_dependency 'pry-byebug'
