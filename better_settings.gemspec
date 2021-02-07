@@ -7,8 +7,8 @@ Gem::Specification.new do |s|
   s.version = BetterSettings::VERSION
   s.authors = ['Máximo Mussini']
   s.email = ['maximomussini@gmail.com']
-  s.summary = 'Settings for Rails applications: simple, immutable, better.'
-  s.description = 'Settings solution for Rails applications that can read YAML files (ERB-enabled) and allows to access using method calls.'
+  s.summary = 'Settings for Ruby applications: fast, immutable, better.'
+  s.description = 'Settings solution for Ruby or Rails applications that can read ERB-enabled YAML files. Safe, performant, with friendly error messages, and no dependencies.'
   s.homepage = 'https://github.com/ElMassimo/better_settings'
   s.license = 'MIT'
   s.extra_rdoc_files = ['README.md']
