@@ -1,17 +1,38 @@
 <h1 align="center">
 Better Settings
 <p align="center">
-<a href="https://travis-ci.org/ElMassimo/better_settings"><img alt="Build Status" src="https://travis-ci.org/ElMassimo/better_settings.svg"/></a>
-<a href="https://coveralls.io/github/ElMassimo/better_settings?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/github/ElMassimo/better_settings/badge.svg?branch=master"/></a>
-<a href="http://inch-ci.org/github/ElMassimo/better_settings"><img alt="Inline docs" src="http://inch-ci.org/github/ElMassimo/better_settings.svg"/></a>
-<a href="https://rubygems.org/gems/better_settings"><img alt="Gem Version" src="https://img.shields.io/gem/v/better_settings.svg?colorB=e9573f"/></a>
-<a href="https://github.com/ElMassimo/better_settings/blob/master/LICENSE.txt"><img alt="License" src="https://img.shields.io/badge/license-MIT-428F7E.svg"/></a>
+  <a href="https://github.com/ElMassimo/better_settings/actions">
+    <img alt="Build Status" src="https://github.com/ElMassimo/better_settings/workflows/build/badge.svg"/>
+  </a>
+  <a href="https://codeclimate.com/github/ElMassimo/better_settings">
+    <img alt="Maintainability" src="https://codeclimate.com/github/ElMassimo/better_settings/badges/gpa.svg"/>
+  </a>
+  <a href="https://codeclimate.com/github/ElMassimo/better_settings">
+    <img alt="Test Coverage" src="https://codeclimate.com/github/ElMassimo/better_settings/badges/coverage.svg"/>
+  </a>
+  <a href="https://rubygems.org/gems/better_settings">
+    <img alt="Gem Version" src="https://img.shields.io/gem/v/better_settings.svg?colorB=e9573f"/>
+  </a>
+  <a href="https://github.com/ElMassimo/better_settings/blob/master/LICENSE.txt">
+    <img alt="License" src="https://img.shields.io/badge/license-MIT-428F7E.svg"/>
+  </a>
 </p>
 </h1>
 
-A robust settings library that can read YML files and provide an immutable object allowing to access settings through method calls. Can be used in __any Ruby app__, __not just Rails__.
+A robust settings library for Ruby. Access your settings by calling methods on a safe immutable object.
 
-### Installation
+### Features ⚡️
+
+- 🚀 __Light and Performant:__ settings are eagerly loaded, no `method_missing` tricks, no dependencies.
+- 💬 __Useful Error Messages:__ when trying to access a setting that does not exist.
+- 💎 __Immutability:__ once created settings can't be modified.
+- 🗂 __Multiple Files:__ useful to create multiple environment-specific source files.
+- ❕ __No Optional Setings:__ since it encourages unsafe access patterns.
+
+You can read more about it in [the blog announcement](https://maximomussini.com/posts/better-settings/).
+
+
+### Installation 💿
 
 Add this line to your application's Gemfile:
 
@@ -27,12 +48,11 @@ Or install it yourself as:
 
     $ gem install better_settings
 
-### Usage
+### Usage 🚀
 
 #### 1. Define a class
 
-Instead of defining a Settings constant for you, that task is left to you. Simply create a class in your application
-that looks like:
+Create a class in your application that extends `BetterSettings`:
 
 ```ruby
 # app/models/settings.rb
@@ -41,12 +61,16 @@ class Settings < BetterSettings
 end
 ```
 
+We use `Rails.root` in this example to obtain an absolute path to a plain YML file,
+but when using other Ruby frameworks you can use `File.expand_path` with `__dir__` instead.
+
+Also, we specified a `namespace` with the current environment. You can provide
+any value that corresponds to a key in the YAML file that you want to use.
+This allows to target different environments with the same file.
+
 #### 2. Create your settings
 
-Notice above we specified an absolute path to our settings file called `application.yml`. This is just a typical YAML file.
-Also notice above that we specified a namespace for our environment. A namespace is just an optional string that corresponds to a key in the YAML file.
-
-Using a namespace allows us to change our configuration depending on our environment:
+Now, create a YAML file that contains all the possible namespaces:
 
 ```yaml
 # config/application.yml
@@ -67,7 +91,21 @@ production:
   <<: *defaults
 ```
 
+The `defaults` group in this example won't be used directly, we are using YAML's
+syntax to reuse those values when we use `<<: *defaults`, allowing us to share
+these values across environments.
+
 #### 3. Access your settings
+
+You can use these settings anywhere, for example in a model:
+
+```ruby
+class Post < ActiveRecord::Base
+  self.per_page = Settings.pagination.posts_per_page
+end
+```
+
+or in the console:
 
 ```
 >> Rails.env
@@ -86,28 +124,23 @@ production:
 => "Did you know you can use ERB inside the YML file? Env is development."
 ```
 
-You can use these settings anywhere, for example in a model:
-
-```ruby
-class Post < ActiveRecord::Base
-  self.per_page = Settings.pagination.posts_per_page
-end
-```
-
 ### Advanced Setup ⚙
-Name it _Settings_, name it _Config_, name it whatever you want. Add as many or as few as you like, read from as many files as necessary (nested keys will be merged).
 
-We usually read a few optional files for the _development_ and _test_ environments, which allows each developer to override some settings in their own local environment (we git ignore `development.yml` and `test.yml`).
+You can create as many setting classes as you need, and name them in different ways, and read from as many files as necessary (nested keys will be merged).
+
+The way I like to use it, is by reading a few optional files for the _development_ and _test_ environments, which allows each developer to override some settings in their own local environment (and git ignoring `development.yml` and `test.yml`).
 
 ```ruby
 # app/models/settings.rb
 class Settings < BetterSettings
-  source "#{ Rails.root }/config/application.yml", namespace: Rails.env
-  source "#{ Rails.root }/config/development.yml", namespace: Rails.env, optional: true if Rails.env.development?
-  source "#{ Rails.root }/config/test.yml", namespace: Rails.env, optional: true if Rails.env.test?
+  source Rails.root.join('config/application.yml'), namespace: Rails.env
+  source Rails.root.join('config/development.yml'), namespace: Rails.env, optional: true if Rails.env.development?
+  source Rails.root.join('config/test.yml'), namespace: Rails.env, optional: true if Rails.env.test?
 end
 ```
-Our `application.yml` looks like this:
+
+Then `application.yml` looks like this:
+
 ```yaml
 # application.yml
 defaults: &defaults
@@ -135,18 +168,12 @@ production:
   <<: *server_defaults
   host: 'example.com'
 ```
+
 A developer might want to override some settings by defining a `development.yml` such as:
+
 ```yaml
 development:
   auto_logout: true
 ````
+
 The main advantage is that those changes won't be tracked in source control :smiley:
-
-## Opinionated Design
-After using [settingslogic](https://github.com/settingslogic/settingslogic) for a long time, we learned some lessons, which are distilled in the following decisions:
-- __Immutability:__ Once created settings can't be modified.
-- __Fail-Fast:__ Settings are eagerly loaded when `source` is called.
-- __No Optional Setings:__ Any optional setting can be modeled in a safer way, this library doesn't allow them.
-- __Not Tied to a Source File:__ Useful to create multiple environment-specific files.
-
-You can read more about it in [this blog post](https://maximomussini.com/posts/better-settings/).

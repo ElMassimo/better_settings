@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Settings < BetterSettings
   source "#{ File.dirname(__FILE__) }/settings.yml"
-  source "#{File.dirname(__FILE__)}/settings_empty.yml"
+  source "#{ File.dirname(__FILE__) }/settings_empty.yml"
 
   def self.custom
     'CUSTOM'
@@ -17,8 +19,8 @@ class DevSettings < BetterSettings
 end
 
 class NoSettings < BetterSettings
-  source "#{File.dirname(__FILE__)}/settings_empty.yml", optional: true
-  source "#{File.dirname(__FILE__)}/settings_none.yml", optional: true
+  source "#{ File.dirname(__FILE__) }/settings_empty.yml", optional: true
+  source "#{ File.dirname(__FILE__) }/settings_none.yml", optional: true
 end
 
 class NoSource < BetterSettings

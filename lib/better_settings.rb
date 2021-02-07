@@ -17,6 +17,7 @@ class BetterSettings
   ]
 
   attr_reader :settings
+
   def_delegators :settings, :to_h, :to_hash
 
   # Public: Initializes a new settings object from a Hash or compatible object.
@@ -34,7 +35,6 @@ class BetterSettings
   end
 
   # Internal: Display explicit errors for typos and missing settings.
-  # rubocop:disable Style/MethodMissing
   def method_missing(name, *)
     raise MissingSetting, "Missing setting '#{ name }' in #{ @parent }"
   end
@@ -53,13 +53,14 @@ private
   # Internal: Defines a getter for the specified setting.
   def create_accessor(key, value)
     raise InvalidSettingKey if !key.is_a?(String) || key !~ VALID_SETTING_NAME || RESERVED_METHODS.include?(key)
+
     instance_variable_set("@#{ key }", auto_wrap(key, value))
     singleton_class.send(:attr_reader, key)
   end
 
   # Internal: Recursively merges two hashes (in case ActiveSupport is not available).
   def deep_merge(this_hash, other_hash)
-    this_hash.merge(other_hash) do |key, this_val, other_val|
+    this_hash.merge(other_hash) do |_key, this_val, other_val|
       if this_val.is_a?(Hash) && other_val.is_a?(Hash)
         deep_merge(this_val, other_val)
       else
@@ -69,6 +70,7 @@ private
   end
 
   class MissingSetting < StandardError; end
+
   class InvalidSettingKey < StandardError; end
 
   class << self
@@ -98,12 +100,14 @@ private
     # Internal: Methods called at the class level are delegated to this instance.
     def root_settings
       raise ArgumentError, '`source` must be specified for the settings' unless defined?(@root_settings)
+
       @root_settings
     end
 
     # Internal: Parses a yml file that can optionally use ERB templating.
     def yaml_to_hash(file_name)
-      return {} if (content = open(file_name).read).empty?
+      return {} if (content = File.open(file_name).read).empty?
+
       YAML.load(ERB.new(content).result).to_hash
     end
   end
