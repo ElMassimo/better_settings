@@ -11,7 +11,7 @@ global: 'wat'
 name: test
 
 development:
-  language:
+  language: &language_defaults
     haskell:
       paradigm: functional
     smalltalk:
@@ -20,10 +20,7 @@ development:
   environment: development
 
 language:
-  haskell:
-    paradigm: functional
-  smalltalk:
-    paradigm: object oriented
+  <<: *language_defaults
 
 collides:
   does: not

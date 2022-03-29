@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.test_files   = Dir.glob('{spec}/**/*.rb')
   s.require_path = 'lib'
 
-  s.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
+  s.required_ruby_version = Gem::Requirement.new('>= 3.1.0')
 
   s.add_development_dependency 'pry-byebug'
   s.add_development_dependency 'rake'

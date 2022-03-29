@@ -108,7 +108,7 @@ private
     def yaml_to_hash(file_name)
       return {} if (content = File.open(file_name).read).empty?
 
-      YAML.load(ERB.new(content).result).to_hash
+      YAML.load(ERB.new(content).result, aliases: true).to_hash
     end
   end
 end
